@@ -1,0 +1,54 @@
+/*temtem.js*/
+.portrait {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    margin-right: 1rem;
+}
+.tem-name {
+    margin-left: 1rem;
+}
+.drop-tem {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    border-top: solid 1px #f0f0f0;
+    border-bottom: solid 1px #f0f0f0;
+    cursor: pointer;
+    margin-right: 0.5rem;
+    margin-left: 0;
+}
+
+/*tem-list.js*/
+ul.tem-list {
+    list-style: none;
+    width: 200px;
+    margin-left: 1rem;
+    margin-top: 0;
+    padding: 0;
+    z-index: 100;
+    color: #f0f0f0;
+    background: #0f0f0f;
+    position: absolute;
+    max-height: 800px;
+    overflow-y: auto;
+}
+li.temtem:last-of-type {
+    border-bottom: none;
+}
+li.temtem:first-of-type {
+    border-top: none;
+}
+li.temtem:nth-of-type(2n + 1) {
+    background: #1f1f1f;
+}
+::-webkit-scrollbar {
+    width: 0.5rem;
+}
+::-webkit-scrollbar-track {
+    background: #1f1f1f;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+    background: #2f2f2f;
+}
