@@ -1,6 +1,7 @@
 import React from "react";
 import TemList from "../temtem/tem-list.js";
 import "./db.css";
+import FreeTemRewards from "../temtem/free-tem.js";
 class DBCall extends React.Component {
   api = "https://temtem-api.mael.tech/api/";
   constructor(props) {
@@ -14,7 +15,11 @@ class DBCall extends React.Component {
       currentData: [],
       isLoaded: false,
       isDropped: false,
+      saiParkLoaded: false,
+      saiParkData: [],
       selectedData: null,
+      saiWater: null,
+      saiLand: null,
       count: 0,
       rate: 1,
     };
@@ -25,7 +30,6 @@ class DBCall extends React.Component {
       .then(
         (result) => {
           this.setState({
-            isLoaded: true,
             currentData: result,
           });
         },
@@ -35,7 +39,43 @@ class DBCall extends React.Component {
             error,
           });
         }
-      );
+      )
+      .then(() => {
+        fetch(this.api + "saipark")
+          .then((r) => r.json())
+          .then(
+            (rs) => {
+              var sw = {
+                portrait: this.state.currentData.find((tem) => {
+                  let name = tem.name + "";
+                  return (
+                    name.toUpperCase() === rs[0].water[0].temtem.toUpperCase()
+                  );
+                }).portraitWikiUrl,
+                ...rs[0].water[0],
+              };
+              var sl = {
+                portrait: this.state.currentData.find((tem) => {
+                  let name = tem.name + "";
+                  return (
+                    name.toUpperCase() === rs[0].land[0].temtem.toUpperCase()
+                  );
+                }).portraitWikiUrl,
+                ...rs[0].land[0],
+              };
+              this.setState({
+                saiParkData: rs,
+                saiWater: sw,
+                saiLand: sl,
+                isLoaded: true,
+                saiParkLoaded: true,
+              });
+            },
+            (e) => {
+              this.setState({ isLoaded: true, error: e });
+            }
+          );
+      });
   }
   toggle = () => {
     this.setState((state) => ({
@@ -61,15 +101,9 @@ class DBCall extends React.Component {
       selectedData: temtem,
       isDropped: !state.isDropped,
     }));
+    this.reset();
   };
   render() {
-
-    //adding listener for pressing space bar
-    document.body.onkeydown = (event) => {
-      if (event.key === " ") {
-        this.addCount();
-      }
-    };
     const {
       isLoaded,
       currentData,
@@ -78,10 +112,18 @@ class DBCall extends React.Component {
       count,
       rate,
       selectedData,
+      saiWater,
+      saiLand,
+      saiParkData,
     } = this.state;
-    var totRate = rate !== 0 ? 8000 / rate : 8000;
+    var totRate = rate !== 0 ? Math.trunc(8000 / rate) : 8000;
     var left = totRate - count;
     var sadFace = left < 0;
+    var dateRange = "";
+    if (saiParkData[0] !== undefined) {
+      dateRange = saiParkData[0].dateRange + "";
+      dateRange = dateRange.substring(0, dateRange.indexOf("2020") + 4);
+    }
     if (error) {
       return <div>Error: {error}</div>;
     } else if (!isLoaded) {
@@ -93,7 +135,7 @@ class DBCall extends React.Component {
       );
     } else {
       return (
-        <div className="wrapper">
+        <div id="wrapper" className="wrapper">
           <div className="dropdown">
             <button className="dropdown-button" onClick={this.toggle}>
               Search Tem
@@ -105,42 +147,104 @@ class DBCall extends React.Component {
             ></TemList>
           </div>
           <div className="main-page">
-            <h1>TEMTEM TRACKER</h1>
-            <div className="temtem">
-              <div></div>
-              {selectedData !== null ? (
-                <div className="tem-name">
-                  <h2>{selectedData.name.toUpperCase()}</h2>
-                  <div className="tem-images">
-                    <img
-                      className="tem-image"
-                      src={selectedData.wikiPortraitUrlLarge}
-                      alt="normal"
-                    ></img>
-                    <img
-                      className="tem-image"
-                      src={selectedData.lumaWikiPortraitUrlLarge}
-                      alt="luma"
-                    ></img>
+            <div className="title-wrap">
+              <div className="title">
+                <div>TEMTEM TRACKER</div>
+                {/* <img src={Logo} alt="logo"></img> */}
+              </div>
+            </div>
+            <div className="tem-info">
+              <div className="temtem">
+                <div></div>
+                {selectedData !== null ? (
+                  <div className="tem-name">
+                    <strong className="lf">
+                      {selectedData.name.toUpperCase()}
+                    </strong>
+                    <div className="tem-images">
+                      <img
+                        className="tem-image"
+                        src={selectedData.wikiPortraitUrlLarge}
+                        alt="normal"
+                      ></img>
+                      <img
+                        className="tem-image"
+                        src={selectedData.lumaWikiPortraitUrlLarge}
+                        alt="luma"
+                      ></img>
+                    </div>
+                  </div>
+                ) : (
+                  <div></div>
+                )}
+
+                <div className="tracker">
+                  <div class="d-flex">
+                    <h2>Count: {count}</h2>
+                    {count > 0 ? (
+                      <button
+                        class="dropdown-button reset"
+                        onClick={this.reset}
+                      >
+                        Reset
+                      </button>
+                    ) : (
+                      <div></div>
+                    )}
+                  </div>
+                  <div>
+                    8000 /
+                    <input
+                      className="luma-rate"
+                      type="number"
+                      name="rate"
+                      value={rate}
+                      min="1"
+                      onChange={this.handleRate}
+                    />{" "}
+                    = {totRate} encounters, hopefully {left} encounters left{" "}
+                    {sadFace === true ? ":(" : ":)"}
                   </div>
                 </div>
-              ) : (
-                <div></div>
-              )}
-
-              <div className="tracker">
-                <h2>Count: {count}</h2>
+              </div>
+              <div className="saipark">
                 <div>
-                  8000 /{" "}
-                  <input
-                    type="number"
-                    name="rate"
-                    value={rate}
-                    min="1"
-                    onChange={this.handleRate}
-                  />{" "}
-                  = {totRate} encounters, hopefully {left} encounters left{" "}
-                  {sadFace === true ? ":(" : ":)"}
+                  <div className="lf align-center">
+                    <strong>SaiPark TemTem of the Week</strong>
+                  </div>
+                  <div className="align-center">({dateRange})</div>
+                </div>
+
+                <div className="sai-wrapper align-center">
+                  <div className="land">
+                    <img
+                      className="sai-image"
+                      src={saiLand.portrait}
+                      alt={saiLand.temtem}
+                    ></img>
+                    <h3>
+                      {saiLand.temtem}, App Rate: {saiLand.lumaRate}%, Min SVs:
+                      {saiLand.minSvs}
+                    </h3>
+                  </div>
+                  <div className="water">
+                    <img
+                      className="sai-image"
+                      src={saiWater.portrait}
+                      alt={saiWater.temtem}
+                    ></img>
+                    <h3>
+                      {saiWater.temtem}, App Rate: {saiWater.lumaRate}%, Min
+                      SVs: {saiWater.minSvs}
+                    </h3>
+                  </div>
+                </div>
+                <div className="free-rewards align-center">
+                  <h2>FreeTem!</h2>
+                  <FreeTemRewards
+                    api={this.api + "freetem/rewards"}
+                    addEncounter={this.addCount}
+                  ></FreeTemRewards>
                 </div>
               </div>
             </div>
