@@ -26,14 +26,15 @@ class TemTem extends React.Component {
     };
   }
   render() {
-    const { wantsDetails, name, portrait } = this.state;
+    const { wantsDetails } = this.state;
+    const {name, portraitWikiUrl} = this.props.temtem;
     if (wantsDetails) {
       return <div className="tem-details"></div>;
     } else {
       return (
         <div className="drop-tem" onClick={()=> this.props.onSelectedTem(this.props.temtem)}>
           <h3 className="tem-name">{name}</h3>
-          <img className="portrait" src={portrait} alt={name}></img>
+          <img className="portrait" src={portraitWikiUrl} alt={name}></img>
         </div>
       );
     }

@@ -117,8 +117,6 @@ class DBCall extends React.Component {
       saiParkData,
     } = this.state;
     var totRate = rate !== 0 ? Math.trunc(8000 / rate) : 8000;
-    var left = totRate - count;
-    var sadFace = left < 0;
     var dateRange = "";
     if (saiParkData[0] !== undefined) {
       dateRange = saiParkData[0].dateRange + "";
@@ -136,7 +134,7 @@ class DBCall extends React.Component {
     } else {
       return (
         <div id="wrapper" className="wrapper">
-          <div className="dropdown">
+          {/* <div className="dropdown">
             <button className="dropdown-button" onClick={this.toggle}>
               Search Tem
             </button>
@@ -145,15 +143,20 @@ class DBCall extends React.Component {
               isDropped={isDropped}
               onSelectedTem={this.handleSelected}
             ></TemList>
-          </div>
+          </div> */}
           <div className="main-page">
-            <div className="title-wrap">
-              <div className="title">
-                <div>TEMTEM TRACKER</div>
-                {/* <img src={Logo} alt="logo"></img> */}
+          <div className="dropdown">
+                <button className="dropdown-button" onClick={this.toggle}>
+                  Search Tem
+                </button>
+                <TemList
+                  currentData={currentData}
+                  isDropped={isDropped}
+                  onSelectedTem={this.handleSelected}
+                ></TemList>
               </div>
-            </div>
             <div className="tem-info">
+              
               <div className="temtem">
                 <div></div>
                 {selectedData !== null ? (
@@ -179,7 +182,7 @@ class DBCall extends React.Component {
                 )}
 
                 <div className="tracker">
-                  <div class="d-flex">
+                  <div className="d-flex">
                     <h2>Count: {count}</h2>
                     {count > 0 ? (
                       <button
@@ -202,8 +205,15 @@ class DBCall extends React.Component {
                       min="1"
                       onChange={this.handleRate}
                     />{" "}
-                    = {totRate} encounters, hopefully {left} encounters left{" "}
-                    {sadFace === true ? ":(" : ":)"}
+                    = {totRate} encounters,{" "}
+                    <strong>
+                      {Math.trunc((count / totRate) * 10000) / 100}%
+                    </strong>{" "}
+                    increased odds of luma encounter
+                  </div>
+                  <div className="small-text">
+                    *This is all just theoretical, with the more normal
+                    encounters the odds of finding a luma increase*
                   </div>
                 </div>
               </div>
