@@ -11,7 +11,7 @@ class FreeTemRewards extends React.Component {
     };
   }
   componentDidMount() {
-    fetch(this.props.api)
+    fetch(this.props.api + "freetem/rewards")
       .then((res) => res.json())
       .then((result) => {
         console.log(result);

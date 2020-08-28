@@ -1,35 +1,29 @@
 import React from "react";
 import "./temtem.css";
 class TemTem extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: props.temtem.name,
-      types: props.temtem.types,
-      number: props.temtem.number,
-      portrait: props.temtem.portraitWikiUrl,
-      wikiUrl: props.temtem.wikiUrl,
-      stats: props.temtem.stats,
-      traits: props.temtem.traits,
-      details: props.temtem.details,
-      techniques: props.temtem.techniques,
-      evolution: props.temtem.evolution,
-      wikiPortrait: props.temtem.wikiPortraitUrlLarge,
-      locations: props.temtem.locations,
-      icon: props.temtem.icon,
-      lumaIcon: props.temtem.lumaIcon,
-      genderRatio: props.temtem.genderRatio,
-      catchRate: props.temtem.catchRate,
-      hatchMins: props.temtem.hatchMins,
-      tvYields: props.temtem.tvYields,
-      wantsDetails: false,
-    };
-  }
   render() {
-    const { wantsDetails } = this.state;
-    const {name, portraitWikiUrl} = this.props.temtem;
+    const { wantsDetails, temtem } = this.props;
+    const {name, portraitWikiUrl} = temtem;
     if (wantsDetails) {
-      return <div className="tem-details"></div>;
+      return <div className="tem-details">
+         <div className="tem-name">
+                     <strong className="lf">
+                       {temtem.name.toUpperCase()}
+                     </strong>
+                     <div className="tem-images">
+                       <img
+                        className="tem-image"
+                        src={temtem.wikiPortraitUrlLarge}
+                        alt="normal"
+                      ></img>
+                      <img
+                        className="tem-image"
+                        src={temtem.lumaWikiPortraitUrlLarge}
+                        alt="luma"
+                       ></img>
+                     </div>
+                   </div>
+      </div>;
     } else {
       return (
         <div className="drop-tem" onClick={()=> this.props.onSelectedTem(this.props.temtem)}>
