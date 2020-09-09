@@ -13,27 +13,24 @@ function sort(data, comp) {
 const headerCells = [
   { id: "number", label: "#", sort: true },
   { id: "name", label: "Temtem", sort: true },
-  {id: "ratio", label: "M/F Ratio", sort: false},
+  { id: "ratio", label: "M/F Ratio", sort: false },
   { id: "type", label: "Type(s)", sort: false },
   { id: "traits", label: "Trait(s)", sort: false },
   { id: "tvyields", label: "TV Yields", sort: false },
 ];
 export default function TemTableHead(props) {
-  const {
-    classes,
-    order,
-    orderBy,
-    numSelected,
-    rowCount,
-    onRequestSort,
-  } = props;
+  const { classes, handleSort } = props;
   return (
     <TableHead>
       <TableRow>
-        {headerCells.map(cell => (
-            <TableCell key={cell.id} className={classes.header}>
-                <div>{cell.label}</div>
-            </TableCell>
+        {headerCells.map((cell) => (
+          <TableCell key={cell.id} className={classes.header}>
+            {cell.sort ? (
+              <div onClick={() => handleSort(cell.id)}>{cell.label}</div>
+            ) : (
+              <div>{cell.label}</div>
+            )}
+          </TableCell>
         ))}
       </TableRow>
     </TableHead>

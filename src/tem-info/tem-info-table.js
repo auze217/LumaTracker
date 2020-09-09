@@ -62,7 +62,7 @@ export default function TemTable(props) {
     <div className="table-container">
       <TableContainer component={Paper} className={classes.container}>
         <Table className={classes.table} aria-label="temtem table">
-          <TemTableHead classes={classes}></TemTableHead>
+          <TemTableHead classes={classes} handleSort={handleSort} order="asc"></TemTableHead>
           <TableBody>
             {(rowsPerPage > 0
               ? currentData.slice(
