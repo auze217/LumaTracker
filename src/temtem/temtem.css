@@ -16,6 +16,10 @@
     margin-right: 0.5rem;
     margin-left: 0;
 }
+.tem-name {
+    display: flex;
+    flex-direction: column;
+}
 
 /*tem-list.js*/
 ul.tem-list {

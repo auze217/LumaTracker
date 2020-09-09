@@ -27,7 +27,7 @@ class DBCall extends React.Component {
       saiWater,
       saiLand,
       saiParkData,
-    } = this.props.props.props; // this is ugly as shit, but dont wanna put in every item
+    } = this.props.props;
     const {count} = this.state;
     return (
       <div id="wrapper" className="wrapper">
@@ -42,7 +42,7 @@ class DBCall extends React.Component {
             saiWater={saiWater}
             saiLand={saiLand}
             saiParkData={saiParkData}
-            api={this.props.props.api}
+            api={this.props.api}
             addEncounter={this.addCount}
           ></SaiPark>
         </div>

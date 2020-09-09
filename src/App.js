@@ -1,10 +1,11 @@
 import React from "react";
 import "./App.css";
 import DBCall from "./db/db.js";
+import TemInfoMaster from "./tem-info/tem-info-master";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 export default class App extends React.Component {
   api = "https://temtem-api.mael.tech/api/";
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       currentData: [],
@@ -14,8 +15,8 @@ export default class App extends React.Component {
       saiParkData: [],
       saiWater: null,
       saiLand: null,
-      error: null
-    }
+      error: null,
+    };
   }
   componentDidMount() {
     fetch(this.api + "temtems")
@@ -70,8 +71,14 @@ export default class App extends React.Component {
           );
       });
   }
+  home() {
+    return <DBCall props={this.state} api={this.api}></DBCall>
+  }
+  temInfo() {
+    return <TemInfoMaster currentData={this.state.currentData}></TemInfoMaster>;
+  }
   render() {
-    const {isLoaded, error} = this.state;
+    const { isLoaded, error } = this.state;
     return (
       <Router>
         <div className="app-wrapper">
@@ -102,15 +109,18 @@ export default class App extends React.Component {
             </div>
             <Switch>
               <Route path="/teminfo">
-                <TemInfo />
+                {this.temInfo()}
               </Route>
               <Route path="/">
-                {isLoaded ? (!error) ?
-                <Home props={this.state} api={this.api}/>
-                : <div></div>
-              :
-              <div></div>
-              }
+                {isLoaded ? (
+                  !error ? (
+                   this.home()
+                  ) : (
+                    <div></div>
+                  )
+                ) : (
+                  <div></div>
+                )}
               </Route>
             </Switch>
           </div>
@@ -120,10 +130,4 @@ export default class App extends React.Component {
   }
 }
 function Highlight(url) {}
-function Home(props, api) {
-  return <DBCall props={props} api={api}></DBCall>;
-}
 
-function TemInfo() {
-  return <h2>Work in Progress :(</h2>;
-}

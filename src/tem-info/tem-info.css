@@ -1,0 +1,21 @@
+/*Global*/
+.d-flex {
+    display: flex;
+}
+/*End Global*/
+/*Begin Table*/
+.table-container {
+    display: flex;
+    justify-content: center;
+    margin: 1rem;
+}
+.cell-portrait {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+.table-name {
+    display: flex;
+    flex-direction: row;
+}
+/*End Table */

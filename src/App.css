@@ -1,9 +1,9 @@
 .app-wrapper {
     display: flex;
-    height: 100vh;
 }
 .body-wrapper {
     width: 100%;
+    margin-left: 100px;
 }
 .title-wrap{
     padding: 0.5rem;
@@ -22,6 +22,7 @@
 }
 nav {
     height: 100vh;
+    position: fixed;
     background: #0f0f0f;
     width: 100px;
     display: flex;
